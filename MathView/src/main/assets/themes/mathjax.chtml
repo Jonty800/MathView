@@ -12,7 +12,7 @@
             {$config}
         </script>
         <script type="text/javascript"
-            src="file:///android_asset/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+            src="file:///android_asset/MathJax/MathJax.js">
         </script>
     </head>
     <body>

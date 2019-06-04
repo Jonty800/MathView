@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         formula_two = (MathView) findViewById(R.id.formula_two);
         formula_two.setConfig("MathJax.Hub.Config({\n" +
-                "    extensions: [\"tex2jax.js\", \"mml2jax.js\"],\n" +
+                "    extensions: [\"tex2jax.js\"],\n" +
                 "    jax: [\"input/TeX\", \"output/SVG\"],\n" +
                 "    tex2jax: {\n" +
                 "      inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],\n" +
