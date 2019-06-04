@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.kexanie.library">
+    package="io.github.jonty800.library">
 
     <application
         android:allowBackup="true"

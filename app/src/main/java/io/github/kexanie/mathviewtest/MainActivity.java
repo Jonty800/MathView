@@ -1,63 +1,28 @@
 package io.github.kexanie.mathviewtest;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import io.github.kexanie.library.MathView;
+import io.github.jonty800.library.MathView;
 
 public class MainActivity extends AppCompatActivity {
     MathView formula_two;
-    MathView formula_three;
-    String tex = "This come from string. You can insert inline formula:" +
-            " \\(ax^2 + bx + c = 0\\) " +
-            "or displayed formula: $$\\sum_{i=0}^n i^2 = \\frac{(n^2+n)(2n+1)}{6}$$";
     String mathml =
-            "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\" mathcolor=\"black\">\n" +
-            "  <mrow>\n" +
-            "    <mi>f</mi>\n" +
-            "    <mrow>\n" +
-            "      <mo>(</mo>\n" +
-            "      <mi>a</mi>\n" +
-            "      <mo>)</mo>\n" +
-            "    </mrow>\n" +
-            "  </mrow>\n" +
-            "  <mo>=</mo>\n" +
-            "  <mrow>\n" +
-            "    <mfrac>\n" +
-            "      <mn>1</mn>\n" +
-            "      <mrow>\n" +
-            "        <mn>2</mn>\n" +
-            "        <mi>&#x3C0;</mi>\n" +
-            "        <mi>i</mi>\n" +
-            "      </mrow>\n" +
-            "    </mfrac>\n" +
-            "    <msub>\n" +
-            "      <mo>&#x222E;</mo>\n" +
-            "      <mrow>\n" +
-            "        <mi>&#x3B3;</mi>\n" +
-            "      </mrow>\n" +
-            "    </msub>\n" +
-            "    <mfrac>\n" +
-            "      <mrow>\n" +
-            "        <mi>f</mi>\n" +
-            "        <mo>(</mo>\n" +
-            "        <mi>z</mi>\n" +
-            "        <mo>)</mo>\n" +
-            "      </mrow>\n" +
-            "      <mrow>\n" +
-            "        <mi>z</mi>\n" +
-            "        <mo>&#x2212;</mo>\n" +
-            "        <mi>a</mi>\n" +
-            "      </mrow>\n" +
-            "    </mfrac>\n" +
-            "    <mi>d</mi>\n" +
-            "    <mi>z</mi>\n" +
-            "  </mrow>\n" +
-            "</math>";
-
+            "$x = 2$" +
+            "<br><br> $$ x = 13 $$"
+            + "<br><br>  $H(2; 1; \\Phi(\\tau))^{(1)}$" +
+            "<br><br>  \\(O(h^{2}+\\tau ^{2})\\)" +
+                    "" +
+                    "" +
+                    "" +
+                    "<br><br>" +
+                    "<br><br>" +
+                    "<div><h2>Abstract</h2><p>This paper deals with the parabolic-parabolic chemotaxis system<span><span><math>{ut=∇⋅(D(u)∇u)−∇⋅(S(u)∇φ(v))+f(u),x∈Ω,t&gt;0vt=△v−v+u,x∈Ω,t&gt;0</math></span></span> in a bounded domain <span><math>Ω⊂Rn(n≥1)</math></span> with smooth boundary conditions, <span><math>D,S∈C2([0,+∞))</math></span> nonnegative, with <span><math>D(u)=a0(u+1)−α</math></span> for <span><math>a0&gt;0</math></span> and <span><math>α&lt;0</math></span>, <span><math>0≤S(u)≤b0(u+1)β</math></span> for <span><math>b0&gt;0,β∈R</math></span> and the singular sensitivity satisfies <span><math>0&lt;φ′(v)≤χvk</math></span> for <span><math>χ&gt;0,k≥1</math></span>. In addition, <span><math>f:R→R</math></span> is a smooth function satisfying <span><math>f(s)≡0</math></span> or generalizing the logistic source <span><math>f(s)=rs−μsm</math></span> for all <span><math>s≥0</math></span> with <span><math>r∈R,μ&gt;0</math></span> and <span><math>m&gt;1</math></span>. It is showed that, for the case without growth source, if <span><math>2β−α&lt;2</math></span>, the corresponding system possesses a globally bounded classical solution. While for the case with logistic source, if <span><math>2β+α&lt;2</math></span> and <span><math>n=1</math></span> or <span><math>n≥2</math></span> with <span><math>m&gt;2β+1</math></span>, the corresponding system has a globally classical solution.</p></div>" +
+                    "<br><br>" +
+                    "<br><br>" +
+                    "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +34,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         formula_two = (MathView) findViewById(R.id.formula_two);
-        formula_three = (MathView) findViewById(R.id.formula_three);
-        formula_two.setText(tex);
-        formula_three.setText(mathml);
+        formula_two.setConfig("MathJax.Hub.Config({\n" +
+                "    extensions: [\"tex2jax.js\", \"mml2jax.js\"],\n" +
+                "    jax: [\"input/TeX\", \"output/SVG\"],\n" +
+                "    tex2jax: {\n" +
+                "      inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],\n" +
+                "      displayMath: [ ['$$','$$'], [\"\\\\[\",\"\\\\]\"] ],\n" +
+                "      processEscapes: true\n" +
+                "    },\n" +
+                //"    \"HTML-CSS\": { fonts: [\"TeX\"] }\n" +
+                "  });");
+        formula_two.setText(mathml);
     }
 
     @Override

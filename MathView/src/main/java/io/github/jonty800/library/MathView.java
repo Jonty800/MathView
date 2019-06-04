@@ -1,4 +1,4 @@
-package io.github.kexanie.library;
+package io.github.jonty800.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,10 +14,10 @@ import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
 
+
 public class MathView extends WebView {
     private String mText;
     private String mConfig;
-    private int mEngine;
 
     public MathView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,7 +32,6 @@ public class MathView extends WebView {
         );
 
         try { // the order of execution of setEngine() and setText() matters
-            setEngine(mTypeArray.getInteger(R.styleable.MathView_engine, 0));
             setText(mTypeArray.getString(R.styleable.MathView_text));
         } finally {
             mTypeArray.recycle();
@@ -46,14 +45,8 @@ public class MathView extends WebView {
     }
 
     private Chunk getChunk() {
-        String TEMPLATE_KATEX = "katex";
-        String TEMPLATE_MATHJAX = "mathjax";
-        String template = TEMPLATE_KATEX;
+        String template = "mathjax";
         AndroidTemplates loader = new AndroidTemplates(getContext());
-        switch (mEngine) {
-            case Engine.KATEX: template = TEMPLATE_KATEX; break;
-            case Engine.MATHJAX: template = TEMPLATE_MATHJAX; break;
-        }
 
         return new Theme(loader).makeChunk(template);
     }
@@ -87,34 +80,7 @@ public class MathView extends WebView {
      * PLEASE PAY ATTENTION THAT THIS METHOD IS FOR MATHJAX ONLY.
      * @param config 
      */
-    public void config(String config) {
-        if (mEngine == Engine.MATHJAX) {
-            this.mConfig = config;
-        }
-    }
-
-    /**
-     * Set the js engine used for rendering the formulas.
-     * @param engine must be one of the constants in class Engine
-     *
-     * This method should be call BEFORE setText().
-     */
-    public void setEngine(int engine) {
-        switch (engine) {
-            case Engine.KATEX: {
-                mEngine = Engine.KATEX;
-                break;
-            }
-            case Engine.MATHJAX: {
-                mEngine = Engine.MATHJAX;
-                break;
-            }
-            default: mEngine = Engine.KATEX;
-        }
-    }
-
-    public static class Engine {
-        final public static int KATEX = 0;
-        final public static int MATHJAX = 1;
+    public void setConfig(String config) {
+        this.mConfig = config;
     }
 }
