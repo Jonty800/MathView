@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 "      processEscapes: false\n" +
                 "    },\n" +
                 "TeX: {\n" +
-                        "    extensions: [\"AMSmath.js\",\"AMSsymbols.js\",\"noErrors.js\",\"noUndefined.js\"]\n" +
-                        "  }"+
+                "    extensions: [\"AMSmath.js\",\"AMSsymbols.js\",\"noErrors.js\",\"noUndefined.js\"]\n" +
+                "  }"+
                 //"    \"HTML-CSS\": { fonts: [\"TeX\"] }\n" +
                 "  });");
         formula_two.setText(mathml);
