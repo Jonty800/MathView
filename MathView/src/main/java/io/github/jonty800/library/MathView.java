@@ -1,8 +1,10 @@
 package io.github.jonty800.library;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,6 +15,8 @@ import android.webkit.WebView;
 import com.x5.template.Chunk;
 import com.x5.template.Theme;
 import com.x5.template.providers.AndroidTemplates;
+
+import java.lang.ref.WeakReference;
 
 
 public class MathView extends WebView {
@@ -75,22 +79,22 @@ public class MathView extends WebView {
 //        return false;
 //    }
 
-    private Chunk getChunk() {
-        String template = "mathjax";
-        AndroidTemplates loader = new AndroidTemplates(getContext());
 
-        return new Theme(loader).makeChunk(template);
-    }
-
+    LoadingTask loadingTask;
+    @SuppressLint("StaticFieldLeak")
     public void setText(String text) {
         mText = text;
-        Chunk chunk = getChunk();
 
-        String TAG_HEAD = "head";
-        String TAG_FORMULA = "formula";
-        chunk.set(TAG_HEAD, mHead);
-        chunk.set(TAG_FORMULA, mText);
-        this.loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", "about:blank");
+        if(loadingTask != null)
+            loadingTask.cancel(true);
+        loadingTask = new LoadingTask(){
+            @Override
+            protected void onPostExecute(Chunk chunk) {
+                super.onPostExecute(chunk);
+                loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
+            }
+        };
+        loadingTask.execute();
     }
 
     public String getText() {
@@ -112,5 +116,26 @@ public class MathView extends WebView {
      */
     public void setConfig(String config) {
         this.mConfig = config;
+    }
+
+    private class LoadingTask extends AsyncTask<Void, Integer, Chunk> {
+        @Override
+        protected Chunk doInBackground(Void... params) {
+            Chunk chunk = getChunk();
+
+            String TAG_HEAD = "head";
+            String TAG_FORMULA = "formula";
+            chunk.set(TAG_HEAD, mHead);
+            chunk.set(TAG_FORMULA, mText);
+
+            return chunk;
+        }
+
+        private Chunk getChunk() {
+            String template = "mathjax";
+            AndroidTemplates loader = new AndroidTemplates(getContext());
+
+            return new Theme(loader).makeChunk(template);
+        }
     }
 }
