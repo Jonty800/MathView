@@ -33,21 +33,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        /*
+        messageStyle: 'none',
+                tex2jax: {preview: 'none'}
+         */
+
         formula_two = (MathView) findViewById(R.id.formula_two);
         formula_two.setConfig("MathJax.Hub.Config({\n" +
                 "    showMathMenu: false," +
+                "    messageStyle: 'none',"+
                 "    extensions: [\"tex2jax.js\"],"+
                 "    jax: [\"input/TeX\",\"input/MathML\", \"output/SVG\"],\n" +
                 "    tex2jax: {\n" +
                 "      inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],\n" +
                 "      displayMath: [ ['$$','$$'], [\"\\\\[\",\"\\\\]\"] ],\n" +
-                "      processEscapes: false\n" +
+                "      processEscapes: false,\n" +
+                //"      preview: 'none'"+
                 "    },\n" +
                 "TeX: {\n" +
                 "    extensions: [\"AMSmath.js\",\"AMSsymbols.js\",\"noErrors.js\",\"noUndefined.js\"]\n" +
                 "  }"+
                 //"    \"HTML-CSS\": { fonts: [\"TeX\"] }\n" +
                 "  });");
+        formula_two.setHead("");
         formula_two.setText(mathml);
     }
 

@@ -18,6 +18,7 @@ import com.x5.template.providers.AndroidTemplates;
 public class MathView extends WebView {
     private String mText;
     private String mConfig;
+    private String mHead;
 
     public MathView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,6 +43,32 @@ public class MathView extends WebView {
         getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     }
 
+    public void setHead(String head){
+        /*
+        <link rel="stylesheet" type="text/css" href="file:///android_asset/themes/style.css">
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+                messageStyle: 'none',
+                tex2jax: {preview: 'none'}
+            });
+        </script>
+        <script type="text/x-mathjax-config">
+            {$config}
+        </script>
+        <script type="text/javascript"
+            src="file:///android_asset/MathJax/MathJax.js">
+        </script>
+         */
+        mHead = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/themes/style.css\">\n" +
+                "        <script type=\"text/x-mathjax-config\">\n" +
+                            mConfig +
+                "        </script>\n" +
+                "        <script type=\"text/javascript\"\n" +
+                "            src=\"file:///android_asset/MathJax/MathJax.js\">\n" +
+                "        </script>" + head;
+
+    }
+
 //    // disable touch event on MathView
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -59,10 +86,10 @@ public class MathView extends WebView {
         mText = text;
         Chunk chunk = getChunk();
 
+        String TAG_HEAD = "head";
         String TAG_FORMULA = "formula";
-        String TAG_CONFIG = "config";
+        chunk.set(TAG_HEAD, mHead);
         chunk.set(TAG_FORMULA, mText);
-        chunk.set(TAG_CONFIG, mConfig);
         this.loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", "about:blank");
     }
 
