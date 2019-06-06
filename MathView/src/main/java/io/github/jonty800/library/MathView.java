@@ -79,26 +79,54 @@ public class MathView extends WebView {
 //        return false;
 //    }
 
+    public void setLoadAsync(boolean loadAsync) {
+        this.loadAsync = loadAsync;
+    }
+
+    boolean loadAsync = true;
+
+
 
     LoadingTask loadingTask;
     @SuppressLint("StaticFieldLeak")
     public void setText(String text) {
         mText = text;
 
-        if(loadingTask != null)
-            loadingTask.cancel(true);
-        loadingTask = new LoadingTask(){
-            @Override
-            protected void onPostExecute(Chunk chunk) {
-                super.onPostExecute(chunk);
-                loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
-            }
-        };
-        loadingTask.execute();
+        if(loadAsync) {
+            if (loadingTask != null)
+                loadingTask.cancel(true);
+            loadingTask = new LoadingTask() {
+                @Override
+                protected void onPostExecute(Chunk chunk) {
+                    super.onPostExecute(chunk);
+                    loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
+                }
+            };
+            loadingTask.execute();
+        }else{
+            Chunk chunk = getChunk();
+
+            String TAG_HEAD = "head";
+            String TAG_FORMULA = "formula";
+            chunk.set(TAG_HEAD, mHead);
+            chunk.set(TAG_FORMULA, mText);
+            loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
+        }
+    }
+
+    public void loadPlaceHolderText(String text) {
+        loadDataWithBaseURL(null, text, "text/html", "utf-8", null);
     }
 
     public String getText() {
         return mText;
+    }
+
+    private Chunk getChunk() {
+        String template = "mathjax";
+        AndroidTemplates loader = new AndroidTemplates(getContext());
+
+        return new Theme(loader).makeChunk(template);
     }
 
     /**
