@@ -13,9 +13,9 @@ public class MainActivity extends AppCompatActivity {
             "$x = 2$" +
             "<br><br> $$ x = 13 $$"
             + "<br><br>  $H(2; 1; \\Phi(\\tau))^{(1)}$" +
-            "<br><br>  \\(O(h^{2}+\\tau ^{2})\\)" +
+            "<br><br>  \\(O(h^{2}+\\tau ^{2})\\)<br><br>" +
                     "" +
-                    "" +
+                    "X^{+}" +
                     "" +
                     "<br><br>" +
                     "<br><br>" +

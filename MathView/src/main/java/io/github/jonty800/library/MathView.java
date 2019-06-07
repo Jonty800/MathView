@@ -12,10 +12,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.x5.template.Chunk;
-import com.x5.template.Theme;
-import com.x5.template.providers.AndroidTemplates;
-
 import java.lang.ref.WeakReference;
 
 
@@ -42,6 +38,16 @@ public class MathView extends WebView {
             mTypeArray.recycle();
         }
     }
+
+    private String basicHead = "<!DOCTYPE html>\n" +
+            "<html>\n" +
+            "    <head>\n" +
+            "        {$head}\n" +
+            "    </head>\n" +
+            "    <body>\n" +
+            "        {$formula}\n" +
+            "    </body>\n" +
+            "</html>";
 
     public void setNoCache(){
         getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -83,9 +89,7 @@ public class MathView extends WebView {
         this.loadAsync = loadAsync;
     }
 
-    boolean loadAsync = true;
-
-
+    boolean loadAsync = false;
 
     LoadingTask loadingTask;
     @SuppressLint("StaticFieldLeak")
@@ -97,20 +101,23 @@ public class MathView extends WebView {
                 loadingTask.cancel(true);
             loadingTask = new LoadingTask() {
                 @Override
-                protected void onPostExecute(Chunk chunk) {
-                    super.onPostExecute(chunk);
-                    loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
+                protected void onPostExecute(String html) {
+                    super.onPostExecute(html);
+                    loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
                 }
             };
             loadingTask.execute();
-        }else{
-            Chunk chunk = getChunk();
-
-            String TAG_HEAD = "head";
-            String TAG_FORMULA = "formula";
-            chunk.set(TAG_HEAD, mHead);
-            chunk.set(TAG_FORMULA, mText);
-            loadDataWithBaseURL(null, chunk.toString(), "text/html", "utf-8", null);
+        }else {
+            String head = basicHead;
+            if (mHead == null)
+                head = head.replace("{$head}", "");
+            else
+                head = head.replace("{$head}", mHead);
+            if (mText == null)
+                head = head.replace("{$formula}", "");
+            else
+                head = head.replace("{$formula}", mText);
+            loadDataWithBaseURL(null, head, "text/html", "utf-8", null);
         }
     }
 
@@ -120,13 +127,6 @@ public class MathView extends WebView {
 
     public String getText() {
         return mText;
-    }
-
-    private Chunk getChunk() {
-        String template = "mathjax";
-        AndroidTemplates loader = new AndroidTemplates(getContext());
-
-        return new Theme(loader).makeChunk(template);
     }
 
     /**
@@ -146,24 +146,20 @@ public class MathView extends WebView {
         this.mConfig = config;
     }
 
-    private class LoadingTask extends AsyncTask<Void, Integer, Chunk> {
+    private class LoadingTask extends AsyncTask<Void, Integer, String> {
         @Override
-        protected Chunk doInBackground(Void... params) {
-            Chunk chunk = getChunk();
+        protected String doInBackground(Void... params) {
+            String head = basicHead;
+            if(mHead==null)
+                head = head.replace("{$head}", "");
+            else
+                head = head.replace("{$head}", mHead);
+            if(mText==null)
+                head = head.replace("{$formula}", "");
+            else
+                head = head.replace("{$formula}", mText);
+            return head;
 
-            String TAG_HEAD = "head";
-            String TAG_FORMULA = "formula";
-            chunk.set(TAG_HEAD, mHead);
-            chunk.set(TAG_FORMULA, mText);
-
-            return chunk;
-        }
-
-        private Chunk getChunk() {
-            String template = "mathjax";
-            AndroidTemplates loader = new AndroidTemplates(getContext());
-
-            return new Theme(loader).makeChunk(template);
         }
     }
 }
